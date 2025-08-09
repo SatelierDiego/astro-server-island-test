@@ -1,11 +1,28 @@
 ---
-const url =
-    "https://timeapi.io/api/time/current/zone?timeZone=America%2FArgentina%2FBuenos_Aires";
-const response = await fetch(url, {
-    // En SSG no afecta el caché en runtime; en SSR evita caché intermedio.
-    cache: "no-store",
-});
-const timeData = await response.json();
+// Obtener datos de tiempo desde la API
+let timeData;
+try {
+    const req = await fetch("api/time.json", {
+        method: "GET",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8",
+        },
+    });
+
+    if (!req.ok) {
+        throw new Error("No se obtuvo la hora desde la api");
+    }
+
+    timeData = await req.json();
+} catch (e) {
+    console.log(e);
+    // En caso de error, usar hora local como fallback
+    timeData = {
+        dateTime: new Date().toISOString(),
+        timeZone: "America/Argentina/Buenos_Aires",
+        utcOffset: "-03:00",
+    };
+}
 
 // Formatear la fecha y hora
 const dateTime = new Date(timeData.dateTime);
