@@ -1,9 +1,9 @@
 ---
 const url =
     "https://timeapi.io/api/time/current/zone?timeZone=America%2FArgentina%2FBuenos_Aires";
-const response = await fetch(url{
-  // En SSG no afecta el caché en runtime; en SSR evita caché intermedio.
-  cache: "no-store",
+const response = await fetch(url, {
+    // En SSG no afecta el caché en runtime; en SSR evita caché intermedio.
+    cache: "no-store",
 });
 const timeData = await response.json();
 
